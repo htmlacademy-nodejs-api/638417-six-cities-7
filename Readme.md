@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
 * Студент: [Павло Пригарницький](https://up.htmlacademy.ru/nodejs-api/7/user/638417).
-* Наставник: `Неизвестно`.
+* Наставник: [Rail Sakhaviev](https://htmlacademy.ru/profile/id1331891).
 
 ---
 
