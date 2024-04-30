@@ -95,8 +95,8 @@ export class TSVFileReader implements FileReader {
     const [lt, ln] = location.split(';');
 
     return {
-      lt: Number.parseInt(lt, 10),
-      ln:  Number.parseInt(ln, 10),
+      lt: Number(lt),
+      ln: Number(ln),
     };
   }
 
