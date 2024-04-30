@@ -1,10 +1,11 @@
 import { CityType } from './city-type.enum.js';
 import { Comment } from './comment.type.js';
 import { HousingType } from './housing-type.enum.js';
+import { Location } from './location.type.js';
 import { User } from './user.type.js';
 
 export type Offer = {
-  name: string;
+  title: string;
   description: string;
   publicationDate: Date;
   city: CityType;
@@ -20,8 +21,5 @@ export type Offer = {
   amenities: string[];
   author: User;
   comments: Comment[];
-  coordinates: {
-      latitude: number;
-      longitude: number;
-  };
+  coordinates: Location;
 }
