@@ -1,5 +1,4 @@
 import { CityType } from './city-type.enum.js';
-import { Comment } from './comment.type.js';
 import { HousingType } from './housing-type.enum.js';
 import { Location } from './location.type.js';
 import { User } from './user.type.js';
@@ -20,6 +19,6 @@ export type Offer = {
   rentalCost: number;
   amenities: string[];
   author: User;
-  comments: Comment[];
+  comments: number;
   coordinates: Location;
 }

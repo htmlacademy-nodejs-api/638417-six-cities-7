@@ -6,7 +6,6 @@ import { CityType } from '../../types/city-type.enum.js';
 import { UserType } from '../../types/user-type.enum.js';
 import { HousingType } from '../../types/housing-type.enum.js';
 import { Location } from '../../types/location.type.js';
-import { Comment } from '../../types/comment.type.js';
 
 export class TSVFileReader implements FileReader {
   private rawData = '';
@@ -45,7 +44,11 @@ export class TSVFileReader implements FileReader {
       numberOfGuests,
       rentalCost,
       amenities,
-      name, email, avatarPath, password, type,
+      name,
+      email,
+      avatarPath,
+      password,
+      type,
       comments,
       coordinates
     ] = line.split('\t');
@@ -66,7 +69,7 @@ export class TSVFileReader implements FileReader {
       rentalCost: this.parsePrice(rentalCost),
       amenities: this.parseAmenities(amenities),
       author: this.parseUser(name, email, avatarPath, password, type as UserType),
-      comments: JSON.parse(comments) as Comment[],
+      comments: Number.parseInt(comments, 10),
       coordinates: this.parseLocation(coordinates)
     };
   }
