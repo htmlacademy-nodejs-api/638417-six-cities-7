@@ -1,5 +1,5 @@
-import { CityType } from './city-type.enum.js';
-import { HousingType } from './housing-type.enum.js';
+import { CityType } from './index.js';
+import { HousingType } from './index.js';
 import { Location } from './location.type.js';
 import { User } from './user.type.js';
 
