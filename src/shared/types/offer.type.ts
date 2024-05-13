@@ -1,13 +1,13 @@
 import { City } from '../enums/city.enum.js';
 import { Housing } from '../enums/housing.enum.js';
-import { Location} from './location.type.js';
+import { Location } from './location.type.js';
 import { User } from './user.type.js';
 
 export type Offer = {
   title: string;
   description: string;
   publicationDate: Date;
-  city:  City;
+  city: City;
   previewImage: string;
   propertyImages: string[];
   premium: boolean;
