@@ -1,19 +1,19 @@
-import { CityType } from './index.js';
-import { HousingType } from './index.js';
-import { Location } from './location.type.js';
+import { City } from '../enums/city.enum.js';
+import { Housing } from '../enums/housing.enum.js';
+import { Location} from './location.type.js';
 import { User } from './user.type.js';
 
 export type Offer = {
   title: string;
   description: string;
   publicationDate: Date;
-  city: CityType;
+  city:  City;
   previewImage: string;
   propertyImages: string[];
   premium: boolean;
   favorite: boolean;
   rating: number;
-  housingType: HousingType;
+  housingType: Housing;
   numberOfRooms: number;
   numberOfGuests: number;
   rentalCost: number;

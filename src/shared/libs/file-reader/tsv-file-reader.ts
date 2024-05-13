@@ -3,7 +3,9 @@ import { FileReader } from './file-reader.interface.js';
 import { Offer } from '../../types/offer.type.js';
 import { User } from '../../types/user.type.js';
 import { Location } from '../../types/location.type.js';
-import { CityType, HousingType, UserType } from '../../types/index.js';
+import { City } from '../../enums/index.js';
+import { Housing } from '../../enums/index.js';
+import { UserType } from '../../enums/index.js';
 
 export class TSVFileReader implements FileReader {
   private rawData = '';
@@ -55,13 +57,13 @@ export class TSVFileReader implements FileReader {
       title,
       description,
       publicationDate: new Date(publicationDate),
-      city: city as CityType,
+      city: city as City,
       previewImage,
       propertyImages: this.parseImages(propertyImages),
       premium: Boolean(premium),
       favorite:  Boolean(favorite),
       rating: Number(rating),
-      housingType: housingType as HousingType,
+      housingType: housingType as Housing,
       numberOfRooms: Number(numberOfRooms),
       numberOfGuests: Number(numberOfGuests),
       rentalCost: this.parsePrice(rentalCost),

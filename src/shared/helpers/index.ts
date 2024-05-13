@@ -1,5 +1,6 @@
 export {
   generateRandomValue,
   getRandomItems,
-  getRandomItem
+  getRandomItem,
+  getRandomBoolean
 } from './common.js';
