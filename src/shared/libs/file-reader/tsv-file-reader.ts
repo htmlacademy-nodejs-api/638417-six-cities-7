@@ -13,6 +13,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
   ) {
     super();
   }
+
   private parseLineToOffer(line: string): Offer {
     const [
       title,

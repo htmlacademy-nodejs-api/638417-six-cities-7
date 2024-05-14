@@ -12,6 +12,7 @@ export class ImportCommand implements Command {
   private onCompleteImport(count: number) {
     console.info(`${count} rows imported.`);
   }
+
   public getName(): string {
     return '--import';
   }
