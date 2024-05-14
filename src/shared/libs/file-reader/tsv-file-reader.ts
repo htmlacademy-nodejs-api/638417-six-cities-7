@@ -1,3 +1,4 @@
+import EventEmitter from 'node:events';
 import { FileReader } from './file-reader.interface.js';
 import { Offer } from '../../types/offer.type.js';
 import { User } from '../../types/user.type.js';
@@ -6,12 +7,14 @@ import { City } from '../../enums/index.js';
 import { Housing } from '../../enums/index.js';
 import { UserType } from '../../enums/index.js';
 
-export class TSVFileReader implements FileReader {
+export class TSVFileReader extends EventEmitter implements FileReader {
   private rawData = '';
 
   constructor(
     private readonly filename: string
-  ) { }
+  ) {
+    super();
+  }
 
   private validateRawData(): void {
     if (!this.rawData) {
@@ -100,7 +103,7 @@ export class TSVFileReader implements FileReader {
   }
 
   public read(): void {
-    // Рефакторим метод импорта из файла
+    // Код для работы с потоками
   }
 
   public toArray(): Offer[] {
