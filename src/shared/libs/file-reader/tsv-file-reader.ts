@@ -29,6 +29,8 @@ export class TSVFileReader implements FileReader {
 
 
   private parseLineToOffer(line: string): Offer {
+
+
     const [
       title,
       description,
@@ -47,7 +49,6 @@ export class TSVFileReader implements FileReader {
       name,
       email,
       avatarPath,
-      password,
       type,
       comments,
       coordinates
@@ -68,7 +69,7 @@ export class TSVFileReader implements FileReader {
       numberOfGuests: Number(numberOfGuests),
       rentalCost: this.parsePrice(rentalCost),
       amenities: this.parseAmenities(amenities),
-      author: this.parseUser(name, email, avatarPath, password, type as UserType),
+      author: this.parseUser(name, email, avatarPath,  type as UserType),
       comments: Number.parseInt(comments, 10),
       coordinates: this.parseLocation(coordinates)
     };
@@ -87,8 +88,8 @@ export class TSVFileReader implements FileReader {
     return amenities.split(';');
   }
 
-  private parseUser(name: string, email: string, avatarPath: string, password: string, type: UserType): User {
-    return { name, email, avatarPath, password, type };
+  private parseUser(name: string, email: string, avatarPath: string, type: UserType): User {
+    return { name, email, avatarPath, type };
   }
 
   private parseLocation(location: string):Location {
