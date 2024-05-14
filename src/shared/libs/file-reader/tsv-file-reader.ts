@@ -1,4 +1,3 @@
-import { readFileSync } from 'node:fs';
 import { FileReader } from './file-reader.interface.js';
 import { Offer } from '../../types/offer.type.js';
 import { User } from '../../types/user.type.js';
@@ -12,10 +11,10 @@ export class TSVFileReader implements FileReader {
 
   constructor(
     private readonly filename: string
-  ) {}
+  ) { }
 
   private validateRawData(): void {
-    if (! this.rawData) {
+    if (!this.rawData) {
       throw new Error('File was not read');
     }
   }
@@ -62,19 +61,18 @@ export class TSVFileReader implements FileReader {
       previewImage,
       propertyImages: this.parseImages(propertyImages),
       premium: Boolean(premium),
-      favorite:  Boolean(favorite),
+      favorite: Boolean(favorite),
       rating: Number(rating),
       housingType: housingType as Housing,
       numberOfRooms: Number(numberOfRooms),
       numberOfGuests: Number(numberOfGuests),
       rentalCost: this.parsePrice(rentalCost),
       amenities: this.parseAmenities(amenities),
-      author: this.parseUser(name, email, avatarPath,  type as UserType),
+      author: this.parseUser(name, email, avatarPath, type as UserType),
       comments: Number.parseInt(comments, 10),
       coordinates: this.parseLocation(coordinates)
     };
   }
-
 
   private parseImages(propertyImages: string): string[] {
     return propertyImages.split(';');
@@ -92,7 +90,7 @@ export class TSVFileReader implements FileReader {
     return { name, email, avatarPath, type };
   }
 
-  private parseLocation(location: string):Location {
+  private parseLocation(location: string): Location {
     const [lt, ln] = location.split(';');
 
     return {
@@ -102,7 +100,7 @@ export class TSVFileReader implements FileReader {
   }
 
   public read(): void {
-    this.rawData = readFileSync(this.filename, { encoding: 'utf-8' });
+    // Рефакторим метод импорта из файла
   }
 
   public toArray(): Offer[] {
