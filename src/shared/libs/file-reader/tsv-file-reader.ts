@@ -1,32 +1,18 @@
-import { readFileSync } from 'node:fs';
-import { FileReader } from './file-reader.interface.js';
-import { Offer } from '../../types/offer.type.js';
-import { User } from '../../types/user.type.js';
-import { CityType } from '../../types/city-type.enum.js';
-import { UserType } from '../../types/user-type.enum.js';
-import { HousingType } from '../../types/housing-type.enum.js';
-import { Location } from '../../types/location.type.js';
+import EventEmitter from 'node:events';
+import { createReadStream } from 'node:fs';
 
-export class TSVFileReader implements FileReader {
-  private rawData = '';
+import { FileReader } from './file-reader.interface.js';
+import { Offer, User, Location } from '../../types/index.js';
+import { City, UserType, Housing } from '../../enums/index.js';
+
+export class TSVFileReader extends EventEmitter implements FileReader {
+  private CHUNK_SIZE = 16384; // 16KB
 
   constructor(
     private readonly filename: string
-  ) {}
-
-  private validateRawData(): void {
-    if (! this.rawData) {
-      throw new Error('File was not read');
-    }
+  ) {
+    super();
   }
-
-  private parseRawDataToOffers(): Offer[] {
-    return this.rawData
-      .split('\n')
-      .filter((row) => row.trim().length > 0)
-      .map((line) => this.parseLineToOffer(line));
-  }
-
 
   private parseLineToOffer(line: string): Offer {
     const [
@@ -47,7 +33,6 @@ export class TSVFileReader implements FileReader {
       name,
       email,
       avatarPath,
-      password,
       type,
       comments,
       coordinates
@@ -57,23 +42,22 @@ export class TSVFileReader implements FileReader {
       title,
       description,
       publicationDate: new Date(publicationDate),
-      city: city as CityType,
+      city: city as City,
       previewImage,
       propertyImages: this.parseImages(propertyImages),
       premium: Boolean(premium),
-      favorite:  Boolean(favorite),
+      favorite: Boolean(favorite),
       rating: Number(rating),
-      housingType: housingType as HousingType,
+      housingType: housingType as Housing,
       numberOfRooms: Number(numberOfRooms),
       numberOfGuests: Number(numberOfGuests),
       rentalCost: this.parsePrice(rentalCost),
       amenities: this.parseAmenities(amenities),
-      author: this.parseUser(name, email, avatarPath, password, type as UserType),
+      author: this.parseUser(name, email, avatarPath, type as UserType),
       comments: Number.parseInt(comments, 10),
       coordinates: this.parseLocation(coordinates)
     };
   }
-
 
   private parseImages(propertyImages: string): string[] {
     return propertyImages.split(';');
@@ -87,11 +71,11 @@ export class TSVFileReader implements FileReader {
     return amenities.split(';');
   }
 
-  private parseUser(name: string, email: string, avatarPath: string, password: string, type: UserType): User {
-    return { name, email, avatarPath, password, type };
+  private parseUser(name: string, email: string, avatarPath: string, type: UserType): User {
+    return { name, email, avatarPath, type };
   }
 
-  private parseLocation(location: string):Location {
+  private parseLocation(location: string): Location {
     const [lt, ln] = location.split(';');
 
     return {
@@ -100,12 +84,29 @@ export class TSVFileReader implements FileReader {
     };
   }
 
-  public read(): void {
-    this.rawData = readFileSync(this.filename, { encoding: 'utf-8' });
-  }
+  public async read(): Promise<void> {
+    const readStream = createReadStream(this.filename, {
+      highWaterMark: this.CHUNK_SIZE,
+      encoding: 'utf-8',
+    });
 
-  public toArray(): Offer[] {
-    this.validateRawData();
-    return this.parseRawDataToOffers();
+    let remainingData = '';
+    let nextLinePosition = -1;
+    let importedRowCount = 0;
+
+    for await (const chunk of readStream) {
+      remainingData += chunk.toString();
+
+      while ((nextLinePosition = remainingData.indexOf('\n')) >= 0) {
+        const completeRow = remainingData.slice(0, nextLinePosition + 1);
+        remainingData = remainingData.slice(++nextLinePosition);
+        importedRowCount++;
+
+        const parsedOffer = this.parseLineToOffer(completeRow);
+        this.emit('line', parsedOffer);
+      }
+    }
+
+    this.emit('end', importedRowCount);
   }
 }

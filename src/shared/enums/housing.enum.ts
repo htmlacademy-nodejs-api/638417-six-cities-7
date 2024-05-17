@@ -1,4 +1,4 @@
-export enum HousingType {
+export enum Housing {
   Apartment = 'apartment',
   House = 'house',
   Room = 'room',
